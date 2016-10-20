@@ -1,5 +1,7 @@
 package kikutaro.heroku.sendgrid;
 
+import javax.servlet.MultipartConfigElement;
+import spark.Request;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
@@ -20,6 +22,13 @@ public class Main {
 
         post("/sendgrid", (req, res) -> {
             System.out.println(req.body());
+            
+            MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/");
+            req.attribute(org.eclipse.jetty.server.Request.__MULTIPART_CONFIG_ELEMENT ,multipartConfigElement);
+            
+            System.out.println("メールタイトルは " + req.raw().getPart("subject"));
+            System.out.println("メール内容" + req.raw().getPart("text"));
+            
             return req.body();
         });
     }
