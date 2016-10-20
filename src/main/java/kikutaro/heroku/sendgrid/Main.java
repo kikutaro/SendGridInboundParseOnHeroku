@@ -18,7 +18,10 @@ public class Main {
         
         get("/sendgrid", (req, res) -> "Hello SendGridder!");
 
-        post("/sendgrid", (req, res) -> req.body());
+        post("/sendgrid", (req, res) -> {
+            System.out.println(req.body());
+            return req.body();
+        });
     }
     
 }
