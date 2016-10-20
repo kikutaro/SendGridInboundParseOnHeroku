@@ -44,7 +44,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>kikutaro.heroku.sendgrid.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
