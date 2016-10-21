@@ -1,12 +1,9 @@
 package kikutaro.heroku.sendgrid;
 
 import java.util.List;
-import javax.servlet.MultipartConfigElement;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import spark.Request;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
@@ -39,10 +36,7 @@ public class Main {
                 }
             });
             
-            System.out.println("メールタイトルは " + req.raw().getPart("subject"));
-            System.out.println("メール内容" + req.raw().getPart("text"));
-            
-            return req.body();
+            return 200;
         });
     }
     
