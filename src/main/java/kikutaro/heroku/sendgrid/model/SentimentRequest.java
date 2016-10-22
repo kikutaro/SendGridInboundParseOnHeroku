@@ -11,10 +11,10 @@ import lombok.Setter;
  * @author kikuta
  */
 @Getter @Setter
-public class CsObject {
-    private List<Document> documents;
+public class SentimentRequest {
+    private List<RequestDocument> documents;
     
-    public CsObject() {
+    public SentimentRequest() {
         documents = new ArrayList<>();
     }
 }

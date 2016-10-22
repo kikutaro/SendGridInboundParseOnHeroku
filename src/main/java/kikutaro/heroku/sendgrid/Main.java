@@ -18,14 +18,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import kikutaro.heroku.plotly.PlotlyResult;
 import kikutaro.heroku.plotly.PlotlyHelper;
-import kikutaro.heroku.sendgrid.model.CsObject;
-import kikutaro.heroku.sendgrid.model.Document;
+import kikutaro.heroku.sendgrid.model.SentimentRequest;
+import kikutaro.heroku.sendgrid.model.RequestDocument;
+import kikutaro.heroku.sendgrid.model.SentimentResult;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import static spark.Spark.get;
 import static spark.Spark.port;
+import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -73,26 +86,29 @@ public class Main {
                     System.out.println(fi.getString());
                     
                     if(StringUtils.equals(fi.getFieldName(), "text")) {
-                        CsObject csObj = new CsObject();
-                        Document doc = new Document();
+                        SentimentRequest csObj = new SentimentRequest();
+                        RequestDocument doc = new RequestDocument();
                         doc.setId(Calendar.getInstance().toString());
                         doc.setLanguage("en");
                         doc.setText(fi.getString());
                         csObj.setDocuments(Arrays.asList(doc));
                         
                         try {
-                            HttpResponse<JsonNode> result = Unirest.post("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment")
+                            HttpResponse<JsonNode> sentimentRet = Unirest.post("https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment")
                                     .header("Content-Type", "application/json")
                                     .header("Ocp-Apim-Subscription-Key", cognitiveKey)
                                     .body(gson.toJson(csObj))
                                     .asJson();
-                            System.out.println("あなたの送信したメールのSentimet : " + result.getBody().toString());
+                            System.out.println("あなたの送信したメールのSentimet : " + sentimentRet.getBody().toString());
+                            
+                            SentimentResult sentimentResult = gson.fromJson(sentimentRet.getBody().toString(), SentimentResult.class);
+                            System.out.println(sentimentResult.getDocuments().get(0).getScore());
                             
                             HttpResponse<JsonNode> plotlyGridRet = Unirest.post("https://api.plot.ly/v2/grids")
                                     .basicAuth(plotlyUser, plotlyPass)
                                     .header("Content-Type", "application/json")
                                     .header("Plotly-Client-Platform", "Java")
-                                    .body(PlotlyHelper.gridSentimentData(Double.parseDouble(result.getBody().toString())))
+                                    .body(PlotlyHelper.gridSentimentData(sentimentResult.getDocuments().get(0).getScore()))
                                     .asJson();
                             
                             PlotlyResult retGrid = gson.fromJson(plotlyGridRet.getBody().toString(), PlotlyResult.class);

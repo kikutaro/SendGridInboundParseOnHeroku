@@ -6,15 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Cognitive Service Documents.
- * 
+ *
  * @author kikuta
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
-public class Document {
-    private String language;
+public class ResultDocument {
+    private double score;
     private String id;
-    private String text;
 }
