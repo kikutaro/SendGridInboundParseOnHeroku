@@ -2,7 +2,6 @@ package kikutaro.heroku.sendgrid;
 
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -14,15 +13,10 @@ import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kikutaro.heroku.plotly.PlotlyResult;
 import kikutaro.heroku.plotly.PlotlyHelper;
 import kikutaro.heroku.sendgrid.model.SentimentRequest;
@@ -32,21 +26,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
-import static spark.Spark.get;
 import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.get;
-import static spark.Spark.post;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -94,6 +74,7 @@ public class Main {
             items.stream().forEach(fi -> {
                 PlotlyResult retPlot = null;
                 String from = null;
+                String text = null;
                 if(fi.isFormField()) {
                     System.out.println(fi.getFieldName());
                     System.out.println(fi.getString());
@@ -101,6 +82,8 @@ public class Main {
                     if(StringUtils.equals(fi.getFieldName(), "from")) {
                         from = fi.getString();
                     } else if(StringUtils.equals(fi.getFieldName(), "text")) {
+                        text = fi.getString();
+                    } else if(!Strings.isNullOrEmpty(from) && !Strings.isNullOrEmpty(text)) {
                         SentimentRequest csObj = new SentimentRequest();
                         RequestDocument doc = new RequestDocument();
                         doc.setId(Calendar.getInstance().toString());
@@ -165,6 +148,7 @@ public class Main {
                             System.out.println(ex.getMessage());
                         } catch (IOException ex) {
                         }
+                        return;
                     }
                 }
             });
