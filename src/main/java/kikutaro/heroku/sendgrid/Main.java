@@ -124,7 +124,8 @@ public class Main {
                             if(!Strings.isNullOrEmpty(from)) {
                                 System.out.println("prepare sending return mail.");
                                 Email to = new Email(from);
-                                Content content = new Content("text/html", retPlot.getFile().getEmbed_url());
+                                Content content = new Content("text/html", 
+                                        "<div><a href=\"" + retPlot.getFile().getEmbed_url() + "\" target=\"_blank\" style=\"display: block; text-align: center;\"><img src=\"" + retPlot.getFile().getEmbed_url() + "\" alt=\"\" style=\"max-width: 100%;width: 600px;\"  width=\"600\" /></a><script data-plotly=\"" + retPlot.getFile().getFid() + "\" src=\"https://plot.ly/embed.js\" async></script></div>");
                                 Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
                                 SendGrid sg = new SendGrid(sgApiKey);
                                 Request request = new Request();
