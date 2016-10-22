@@ -120,6 +120,7 @@ public class Main {
                             retPlot = gson.fromJson(plotlyPlotRet.getBody().toString(), PlotlyResult.class);
                             
                             System.err.println(retPlot.getFile().getEmbed_url());
+                            System.err.println(retPlot.getFile().getWeb_url());
                             
                             if(!Strings.isNullOrEmpty(from)) {
                                 System.out.println("prepare sending return mail.");
@@ -127,7 +128,7 @@ public class Main {
                                 Content content = new Content("text/html", 
                                         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
                                                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head><body>"
-                                                + "<div><a href=\"" + retPlot.getFile().getEmbed_url() + "\" target=\"_blank\" style=\"display: block; text-align: center;\"><img src=\"" + retPlot.getFile().getEmbed_url() + "\" alt=\"\" style=\"max-width: 100%;width: 600px;\"  width=\"600\" /></a><script data-plotly=\"" + retPlot.getFile().getFid() + "\" src=\"https://plot.ly/embed.js\" async></script></div>"
+                                                + "<div><a href=\"" + retPlot.getFile().getWeb_url() + "\" target=\"_blank\" style=\"display: block; text-align: center;\"><img src=\"" + retPlot.getFile().getWeb_url() + "\" alt=\"\" style=\"max-width: 100%;width: 600px;\"  width=\"600\" /></a><script data-plotly=\"" + retPlot.getFile().getFid() + "\" src=\"https://plot.ly/embed.js\" async></script></div>"
                                                 + "</body></html>");
                                 Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
                                 SendGrid sg = new SendGrid(sgApiKey);

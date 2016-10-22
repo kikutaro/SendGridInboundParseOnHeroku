@@ -16,5 +16,6 @@ import lombok.Setter;
 public class PlotlyFile {
     private String fid;
     private String embed_url;
+    private String web_url;
     private List<GridCol> cols;
 }
