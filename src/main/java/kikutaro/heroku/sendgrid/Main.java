@@ -7,6 +7,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sendgrid.Content;
+import com.sendgrid.Email;
+import com.sendgrid.Mail;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -75,12 +82,18 @@ public class Main {
             if(Strings.isNullOrEmpty(plotlyPass)) {
                 System.out.println("plot.lyのパスワードが登録されていません");
             }
+            String sgApiKey = System.getenv("SG_API_KEY");
+            if(Strings.isNullOrEmpty(sgApiKey)) {
+                System.out.println("SendGridのAPI KEYが登録されていません");
+            }
             
             Gson gson = new Gson();
             
             System.out.println("リクエストのパース開始");
             List<FileItem> items = upload.parseRequest(req.raw());
             items.stream().forEach(fi -> {
+                PlotlyResult retPlot = null;
+                String from = null;
                 if(fi.isFormField()) {
                     System.out.println(fi.getFieldName());
                     System.out.println(fi.getString());
@@ -119,13 +132,37 @@ public class Main {
                                     .header("Plotly-Client-Platform", "Java")
                                     .body(PlotlyHelper.plotPieData(retGrid.getFile().getFid(), retGrid.getFile().getCols().get(0).getUid(), retGrid.getFile().getCols().get(1).getUid()))
                                     .asJson();
-                            PlotlyResult retPlot = gson.fromJson(plotlyPlotRet.getBody().toString(), PlotlyResult.class);
+                            retPlot = gson.fromJson(plotlyPlotRet.getBody().toString(), PlotlyResult.class);
                             
                             System.err.println(retPlot.getFile().getEmbed_url());
                             
                         } catch (UnirestException ex) {
                             System.out.println(ex.getMessage());
                         } catch (IOException ex) {
+                        }
+                    } else if(StringUtils.equals(fi.getFieldName(), "from")) {
+                        from = fi.getString();
+                    }  
+                } else {
+                    System.out.println("prepare sending return mail.");
+                    if(!Strings.isNullOrEmpty(from) && retPlot != null) {
+                        Email to = new Email(from);
+                        Content content = new Content("text/html", retPlot.getFile().getEmbed_url());
+                        Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
+                        SendGrid sg = new SendGrid(sgApiKey);
+                        Request request = new Request();
+                        request.method = Method.POST;
+                        request.endpoint = "mail/send";
+                        try {
+                            request.body = mail.build();
+                        } catch (IOException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                        try {
+                            Response response = sg.api(request);
+                            System.out.println(response.toString());
+                        } catch (IOException ex) {
+                            System.out.println(ex.getMessage());
                         }
                     }
                 }
