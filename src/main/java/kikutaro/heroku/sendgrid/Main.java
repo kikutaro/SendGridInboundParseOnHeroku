@@ -70,11 +70,11 @@ public class Main {
             Gson gson = new Gson();
             
             System.out.println("リクエストのパース開始");
+            String from = null;
+            String text = null;
+            PlotlyResult retPlot;
             List<FileItem> items = upload.parseRequest(req.raw());
-            items.stream().forEach(fi -> {
-                PlotlyResult retPlot = null;
-                String from = null;
-                String text = null;
+            for(FileItem fi : items) {
                 if(fi.isFormField()) {
                     System.out.println(fi.getFieldName());
                     System.out.println(fi.getString());
@@ -148,10 +148,10 @@ public class Main {
                             System.out.println(ex.getMessage());
                         } catch (IOException ex) {
                         }
-                        return;
+                        break;
                     }
                 }
-            });
+            }
             
             return 200;
         });
