@@ -98,7 +98,9 @@ public class Main {
                     System.out.println(fi.getFieldName());
                     System.out.println(fi.getString());
                     
-                    if(StringUtils.equals(fi.getFieldName(), "text")) {
+                    if(StringUtils.equals(fi.getFieldName(), "from")) {
+                        from = fi.getString();
+                    } else if(StringUtils.equals(fi.getFieldName(), "text")) {
                         SentimentRequest csObj = new SentimentRequest();
                         RequestDocument doc = new RequestDocument();
                         doc.setId(Calendar.getInstance().toString());
@@ -136,33 +138,32 @@ public class Main {
                             
                             System.err.println(retPlot.getFile().getEmbed_url());
                             
+                            if(!Strings.isNullOrEmpty(from)) {
+                                System.out.println("prepare sending return mail.");
+                                Email to = new Email(from);
+                                Content content = new Content("text/html", retPlot.getFile().getEmbed_url());
+                                Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
+                                SendGrid sg = new SendGrid(sgApiKey);
+                                Request request = new Request();
+                                request.method = Method.POST;
+                                request.endpoint = "mail/send";
+                                try {
+                                    request.body = mail.build();
+                                } catch (IOException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                                try {
+                                    Response response = sg.api(request);
+                                    System.out.println(response.toString());
+                                } catch (IOException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                            } else {
+                                System.out.println("not get from address");
+                            }
                         } catch (UnirestException ex) {
                             System.out.println(ex.getMessage());
                         } catch (IOException ex) {
-                        }
-                    } else if(StringUtils.equals(fi.getFieldName(), "from")) {
-                        from = fi.getString();
-                    }  
-                } else {
-                    System.out.println("prepare sending return mail.");
-                    if(!Strings.isNullOrEmpty(from) && retPlot != null) {
-                        Email to = new Email(from);
-                        Content content = new Content("text/html", retPlot.getFile().getEmbed_url());
-                        Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
-                        SendGrid sg = new SendGrid(sgApiKey);
-                        Request request = new Request();
-                        request.method = Method.POST;
-                        request.endpoint = "mail/send";
-                        try {
-                            request.body = mail.build();
-                        } catch (IOException ex) {
-                            System.out.println(ex.getMessage());
-                        }
-                        try {
-                            Response response = sg.api(request);
-                            System.out.println(response.toString());
-                        } catch (IOException ex) {
-                            System.out.println(ex.getMessage());
                         }
                     }
                 }
