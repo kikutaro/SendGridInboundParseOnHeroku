@@ -130,6 +130,8 @@ public class Main {
                                         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
                                                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head><body>"
                                                 + "<div><a href=\"" + retPlot.getFile().getWeb_url() + "\" target=\"_blank\" style=\"display: block; text-align: center;\"><img src=\"" + retPlot.getFile().getWeb_url() + ".png\" alt=\"\" style=\"max-width: 100%;width: 600px;\"  width=\"600\" /></a><script data-plotly=\"" + retPlot.getFile().getFid() + "\" src=\"https://plot.ly/embed.js\" async></script></div>"
+                                                + "<p>Checked sentence</p>"
+                                                + text
                                                 + "</body></html>");
                                 Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
                                 SendGrid sg = new SendGrid(sgApiKey);
