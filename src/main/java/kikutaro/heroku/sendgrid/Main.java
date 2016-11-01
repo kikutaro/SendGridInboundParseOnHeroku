@@ -86,7 +86,7 @@ public class Main {
                     } else if(!Strings.isNullOrEmpty(from) && !Strings.isNullOrEmpty(text)) {
                         SentimentRequest csObj = new SentimentRequest();
                         RequestDocument doc = new RequestDocument();
-                        doc.setId(Calendar.getInstance().toString());
+                        doc.setId(Long.toString(System.currentTimeMillis()));
                         doc.setLanguage("en");
                         doc.setText(fi.getString());
                         csObj.setDocuments(Arrays.asList(doc));
@@ -97,6 +97,7 @@ public class Main {
                                     .header("Ocp-Apim-Subscription-Key", cognitiveKey)
                                     .body(gson.toJson(csObj))
                                     .asJson();
+                            System.out.println("JSONデータ : " + gson.toJson(csObj));
                             System.out.println("あなたの送信したメールのSentimet : " + sentimentRet.getBody().toString());
                             
                             SentimentResult sentimentResult = gson.fromJson(sentimentRet.getBody().toString(), SentimentResult.class);

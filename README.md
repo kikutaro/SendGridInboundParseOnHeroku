@@ -1,7 +1,7 @@
 # SendGridのInbound Parse Webhookを利用したサンプル
 
-SendGridのInbound Parse Webhook機能でメール受信したデータをHerokuのアプリへPostする。
-アプリ側でデータを加工して処理する
+SendGridのInbound Parse Webhook機能でメール受信したデータをHerokuのアプリへPostします。
+Heroku上のJava(Spark)にてメールデータに対して以下の処理を行います。
 - Microsoftの[Cognitive Service](https://www.microsoft.com/cognitive-services/en-us/apis)にある[Text Analytics API](https://www.microsoft.com/cognitive-services/en-us/text-analytics-api)を利用し、メール文面のNegative/Positive度合い(Sentimentと呼ばれる)を解析する
 - [Plotly](https://plot.ly/)を利用してグラフ化する
 - SendGridを利用して、グラフ画像を送信元に返信する
