@@ -88,7 +88,7 @@ public class Main {
                         RequestDocument doc = new RequestDocument();
                         doc.setId(Long.toString(System.currentTimeMillis()));
                         doc.setLanguage("en");
-                        doc.setText(fi.getString());
+                        doc.setText(text);
                         csObj.setDocuments(Arrays.asList(doc));
                         
                         try {
