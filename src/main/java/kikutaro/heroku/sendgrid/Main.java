@@ -15,7 +15,6 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import kikutaro.heroku.plotly.PlotlyResult;
 import kikutaro.heroku.plotly.PlotlyHelper;
@@ -65,6 +64,10 @@ public class Main {
             String sgApiKey = System.getenv("SG_API_KEY");
             if(Strings.isNullOrEmpty(sgApiKey)) {
                 System.out.println("SendGridのAPI KEYが登録されていません");
+            }
+            String sgFrom = System.getenv("SG_FROM");
+            if(Strings.isNullOrEmpty(sgApiKey)) {
+                System.out.println("Fromが登録されていません");
             }
             
             Gson gson = new Gson();
@@ -133,7 +136,7 @@ public class Main {
                                                 + "<p>Checked sentence</p>"
                                                 + text
                                                 + "</body></html>");
-                                Mail mail = new Mail(new Email(from), "Result setiment of previous your mail.", to, content);
+                                Mail mail = new Mail(new Email(sgFrom), "Result setiment of previous your mail.", to, content);
                                 SendGrid sg = new SendGrid(sgApiKey);
                                 Request request = new Request();
                                 request.method = Method.POST;
