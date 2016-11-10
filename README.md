@@ -1,10 +1,7 @@
-# SendGridのInbound Parse Webhookを利用したサンプル
+# Microsoft Cognitive ServicesとSendGridを利用したメール感情判定アプリのサンプル
 
-SendGridのInbound Parse Webhook機能でメール受信したデータをHerokuのアプリへPostします。
-Heroku上のJava(Spark)にてメールデータに対して以下の処理を行います。
-- Microsoftの[Cognitive Service](https://www.microsoft.com/cognitive-services/en-us/apis)にある[Text Analytics API](https://www.microsoft.com/cognitive-services/en-us/text-analytics-api)を利用し、メール文面のNegative/Positive度合い(Sentimentと呼ばれる)を解析する
-- [Plotly](https://plot.ly/)を利用してグラフ化する
-- SendGridを利用して、グラフ画像を送信元に返信する
+感情が伝わりにくいといわれるメール。そんなメールの内容について、人工知能が客観的に感情レベルを採点してくれる簡易Webアプリです。
+感情といっても、現時点では、ポジティブさ、ネガティブさの度合いのみの判定となります。
 
 ### 実行イメージ
 
@@ -16,6 +13,15 @@ SendGridのInbound Parse Webhookで設定したドメインを含む宛先へメ
 送信したメール内容に基づいて、ポジティブ・ネガティブの判定がグラフで返信されます。
 
 <img src="https://sendgrid.kke.co.jp/blog/wp/wp-content/uploads/2016/11/Blog3.jpg" alt="結果メール" title="結果メール" width="450px">
+
+### 仕組み
+
+SendGridのInbound Parse Webhook機能でメール受信したデータをHerokuのアプリへPostします。
+Heroku上のJava(Spark)にてメールデータに対して以下の処理を行います。
+- Microsoftの[Cognitive Service](https://www.microsoft.com/cognitive-services/en-us/apis)にある[Text Analytics API](https://www.microsoft.com/cognitive-services/en-us/text-analytics-api)を利用し、メール文面のNegative/Positive度合い(Sentimentと呼ばれる)を解析する
+- [Plotly](https://plot.ly/)を利用してグラフ化する
+- SendGridを利用して、グラフ画像を送信元に返信する
+
 
 ### Heroku Config Vars
 実際に同じことを試す場合には、Herokuで以下の環境変数設定が必要です。
