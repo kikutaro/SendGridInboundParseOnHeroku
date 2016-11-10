@@ -10,9 +10,11 @@ Heroku上のJava(Spark)にてメールデータに対して以下の処理を行
 
 SendGridのInbound Parse Webhookで設定したドメインを含む宛先へメールを送信します。
 （Text Analytics APIは2016/11/11現在、日本語に対応していないため、メール内容は英語で送信します）
+
 <img src="https://sendgrid.kke.co.jp/blog/wp/wp-content/uploads/2016/11/Blog2.jpg" alt="送信メール" title="送信メール" width="450px">
 
 送信したメール内容に基づいて、ポジティブ・ネガティブの判定がグラフで返信されます。
+
 <img src="https://sendgrid.kke.co.jp/blog/wp/wp-content/uploads/2016/11/Blog3.jpg" alt="結果メール" title="結果メール" width="450px">
 
 ### Heroku Config Vars
